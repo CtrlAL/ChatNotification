@@ -1,4 +1,4 @@
-﻿using KafkaTest.Domain;
+﻿using Chat.Domain;
 
 namespace Chat.Repositories.Interfaces
 {

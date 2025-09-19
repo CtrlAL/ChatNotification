@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 
-namespace KafkaTest.Interfaces
+namespace Chat.Interfaces
 {
     public interface IRedisCache
     {

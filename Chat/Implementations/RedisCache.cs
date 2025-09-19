@@ -1,7 +1,7 @@
-﻿using KafkaTest.Interfaces;
+﻿using Chat.Interfaces;
 using StackExchange.Redis;
 
-namespace KafkaTest.Implementations
+namespace Chat.Implementations
 {
     public class RedisCache : IRedisCache
     {

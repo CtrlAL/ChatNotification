@@ -1,7 +1,8 @@
-using KafkaTest.Domain;
-using KafkaTest.Implementations;
+using Chat.Domain;
+using Chat.Implementations;
+using Chat.Repositories.Implementations;
 
-namespace KafkaTest
+namespace Chat
 {
     public class Program
     {
@@ -15,6 +16,7 @@ namespace KafkaTest
             builder.Services.AddProducer<Message>(builder.Configuration);
             builder.Services.AddRedis(builder.Configuration);
             builder.Services.AddMongo(builder.Configuration);
+            builder.Services.AddRepositrories();
 
             var app = builder.Build();
 

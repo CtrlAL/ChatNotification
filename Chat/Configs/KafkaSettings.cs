@@ -1,4 +1,4 @@
-﻿namespace KafkaTest.Configs
+﻿namespace Chat.Configs
 {
     public class KafkaSettings
     {

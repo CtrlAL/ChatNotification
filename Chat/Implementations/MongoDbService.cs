@@ -1,5 +1,5 @@
 ﻿using Chat.Configs;
-using KafkaTest.Domain;
+using Chat.Domain;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 

@@ -1,7 +1,7 @@
 ﻿using Confluent.Kafka;
 using System.Text.Json;
 
-namespace KafkaTest.Implementations
+namespace Chat.Implementations
 {
     public class MessageSerializer<TMessage> : ISerializer<TMessage>
     {

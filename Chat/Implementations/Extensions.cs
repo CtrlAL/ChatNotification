@@ -1,11 +1,11 @@
 ﻿using Chat.Configs;
 using Chat.Implementations;
-using KafkaTest.Configs;
-using KafkaTest.Interfaces;
+using Chat.Configs;
+using Chat.Interfaces;
 using MongoDB.Driver;
 using StackExchange.Redis;
 
-namespace KafkaTest.Implementations
+namespace Chat.Implementations
 {
     public static class Extensions
     {

@@ -1,6 +1,6 @@
 ﻿using Chat.Implementations;
 using Chat.Repositories.Interfaces;
-using KafkaTest.Domain;
+using Chat.Domain;
 using MongoDB.Driver;
 
 namespace Chat.Repositories.Implementations

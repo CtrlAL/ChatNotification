@@ -1,4 +1,4 @@
-﻿namespace KafkaTest.Interfaces
+﻿namespace Chat.Interfaces
 {
     public interface IRedisPubSub
     {

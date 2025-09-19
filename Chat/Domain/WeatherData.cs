@@ -1,4 +1,4 @@
-﻿namespace KafkaTest.Domain
+﻿namespace Chat.Domain
 {
     public class WeatherData
     {

@@ -1,8 +1,8 @@
 ﻿using Chat.Repositories.Interfaces;
-using KafkaTest.Domain;
+using Chat.Domain;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KafkaTest.Controllers
+namespace Chat.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
