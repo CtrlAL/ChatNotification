@@ -8,7 +8,7 @@ namespace Chat.Implementations
     public class MongoDbService
     {
         private readonly IMongoDatabase _database;
-        public IMongoCollection<Message> Messages { get; set; }
+        public IMongoCollection<ChatMessage> ChatMessages { get; set; }
 
         public MongoDbService(IMongoDatabase database, IOptions<MongoDbSettings> options)
         {
@@ -19,7 +19,7 @@ namespace Chat.Implementations
         private void SetupCollections(IOptions<MongoDbSettings> options)
         {
             var collectionNames = options.Value.CollectionNames;
-            Messages = _database.GetCollection<Message>(collectionNames["Messages"]);
+            ChatMessages = _database.GetCollection<ChatMessage>(collectionNames["ChatMessages"]);
         }
 
         public IMongoDatabase Database => _database;
