@@ -1,6 +1,7 @@
-﻿using KafkaTest.Configs;
+﻿using Chat.Configs;
+using Chat.Implementations;
+using KafkaTest.Configs;
 using KafkaTest.Interfaces;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using StackExchange.Redis;
 
@@ -46,6 +47,10 @@ namespace KafkaTest.Implementations
                 var databaseName = configuration.GetConnectionString("MongoConnection");
                 return client.GetDatabase(databaseName);
             });
+
+            services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
+
+            services.AddSingleton<MongoDbService>();
         }
     }
 }
