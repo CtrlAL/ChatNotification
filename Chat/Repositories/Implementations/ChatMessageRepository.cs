@@ -34,7 +34,7 @@ namespace Chat.Repositories.Implementations
             return list.FirstOrDefault();
         }
 
-        public async Task RemoveAsyc(int id)
+        public async Task RemoveAsync(int id)
         {
             await _collection.DeleteOneAsync(x => x.Id == id);
         }
