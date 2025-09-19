@@ -16,30 +16,30 @@ namespace Chat.Repositories.Implementations
             _collection = _dbService.ChatMessages;
         }
 
-        public async Task<ChatMessage> Create(ChatMessage message)
+        public async Task<ChatMessage> CreateAsync(ChatMessage message)
         {
             await _collection.InsertOneAsync(message);
             return message;
         }
 
-        public async Task<List<ChatMessage>> Get()
+        public async Task<List<ChatMessage>> GetAsync()
         {
             var list = await _collection.FindAsync(x => true);
             return list.ToList();
         }
 
-        public async Task<ChatMessage> Get(int id)
+        public async Task<ChatMessage> GetAsync(int id)
         {
             var list = await _collection.FindAsync(x => x.Id == id);
             return list.FirstOrDefault();
         }
 
-        public async Task Remove(int id)
+        public async Task RemoveAsyc(int id)
         {
             await _collection.DeleteOneAsync(x => x.Id == id);
         }
 
-        public async Task Update(int id, ChatMessage message)
+        public async Task UpdateAsync(int id, ChatMessage message)
         {
             await _collection.ReplaceOneAsync(x => x.Id == id, message);
         }
