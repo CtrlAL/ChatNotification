@@ -1,5 +1,5 @@
-﻿using KafkaTest.Domain;
-using KafkaTest.Interfaces;
+﻿using Chat.Repositories.Interfaces;
+using KafkaTest.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KafkaTest.Controllers
@@ -8,13 +8,11 @@ namespace KafkaTest.Controllers
     [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
-        private readonly IRedisPubSub _redis;
-        private readonly IRedisCache _redisCache;
+        private readonly IChatMessageRepository _messageRepository;
 
-        public ChatController(IRedisPubSub redis, IRedisCache redisCache)
+        public ChatController(IChatMessageRepository messageRepository)
         {
-            _redis = redis;
-            _redisCache = redisCache;
+            _messageRepository = messageRepository;
         }
 
         [HttpPost("send")]
@@ -23,11 +21,7 @@ namespace KafkaTest.Controllers
             if (string.IsNullOrWhiteSpace(message.Text))
                 return BadRequest("Сообщение не может быть пустым.");
 
-            var formattedMessage = $"{DateTime.Now:HH:mm:ss} [{message.User}]: {message.Text}";
-
-            await _redisCache.AddToListAsync("chat:history", formattedMessage);
-
-            await _redis.PublishAsync("chat", formattedMessage);
+            await _messageRepository.CreateAsync(message);
 
             return Ok("Сообщение отправлено");
         }
@@ -35,8 +29,8 @@ namespace KafkaTest.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory()
         {
-            var history = await _redisCache.GetListAsync("chat:history");
-            return Ok(history ?? new List<string>());
+            var history = await _messageRepository.GetAsync();
+            return Ok(history ?? new List<ChatMessage>());
         }
     }
 }
