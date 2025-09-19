@@ -1,6 +1,6 @@
 ﻿using Chat.Domain;
-using Chat.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Redis.Interfaces;
 using System.Text.Json;
 
 namespace Chat.Controllers

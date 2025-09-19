@@ -1,4 +1,4 @@
-﻿namespace Chat.Interfaces
+﻿namespace Kafka.Interfaces
 {
     public interface IMessageProducer<TMessage> : IDisposable
     {

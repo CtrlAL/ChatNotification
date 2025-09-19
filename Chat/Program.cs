@@ -1,6 +1,8 @@
 using Chat.Domain;
 using Chat.Implementations;
 using Chat.Repositories.Implementations;
+using Kafka.Implementations;
+using Redis.Implementations;
 
 namespace Chat
 {

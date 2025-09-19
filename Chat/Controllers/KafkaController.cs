@@ -1,5 +1,5 @@
 using Chat.Domain;
-using Chat.Interfaces;
+using Kafka.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.Controllers

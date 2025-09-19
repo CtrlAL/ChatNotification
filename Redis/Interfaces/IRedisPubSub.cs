@@ -1,4 +1,4 @@
-﻿namespace Chat.Interfaces
+﻿namespace Redis.Interfaces
 {
     public interface IRedisPubSub
     {

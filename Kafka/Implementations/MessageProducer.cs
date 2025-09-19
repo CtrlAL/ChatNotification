@@ -1,9 +1,9 @@
 ﻿using Confluent.Kafka;
-using Chat.Configs;
-using Chat.Interfaces;
+using Kafka.Configs;
+using Kafka.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace Chat.Implementations
+namespace Kafka.Implementations
 {
     public class MessageProducer<TMessage> : IMessageProducer<TMessage>
     {

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-
-namespace Chat.Interfaces
+﻿namespace Redis.Interfaces
 {
     public interface IRedisCache
     {

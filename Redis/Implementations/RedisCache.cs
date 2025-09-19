@@ -1,7 +1,7 @@
-﻿using Chat.Interfaces;
+﻿using Redis.Interfaces;
 using StackExchange.Redis;
 
-namespace Chat.Implementations
+namespace Redis.Implementations
 {
     public class RedisCache : IRedisCache
     {

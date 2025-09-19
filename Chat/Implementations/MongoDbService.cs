@@ -21,7 +21,5 @@ namespace Chat.Implementations
             var collectionNames = options.Value.CollectionNames;
             ChatMessages = _database.GetCollection<ChatMessage>(collectionNames["ChatMessages"]);
         }
-
-        public IMongoDatabase Database => _database;
     }
 }
