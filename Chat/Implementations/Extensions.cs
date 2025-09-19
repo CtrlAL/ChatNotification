@@ -1,5 +1,6 @@
 ﻿using Chat.Configs;
 using Chat.Interfaces;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using StackExchange.Redis;
 
@@ -33,6 +34,8 @@ namespace Chat.Implementations
 
         public static void AddMongo(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
+
             services.AddSingleton<IMongoClient>(sp =>
             {
                 var connectionString = configuration.GetConnectionString("MongoConnection");
@@ -42,11 +45,10 @@ namespace Chat.Implementations
             services.AddScoped<IMongoDatabase>(sp =>
             {
                 var client = sp.GetRequiredService<IMongoClient>();
-                var databaseName = configuration.GetConnectionString("MongoConnection");
+                var options = sp.GetRequiredService<IOptions<MongoDbSettings>>();
+                var databaseName = options.Value.DatabaseName;
                 return client.GetDatabase(databaseName);
             });
-
-            services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
 
             services.AddScoped<MongoDbService>();
         }
