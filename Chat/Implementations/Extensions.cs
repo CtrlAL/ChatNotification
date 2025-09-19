@@ -1,6 +1,4 @@
 ﻿using Chat.Configs;
-using Chat.Implementations;
-using Chat.Configs;
 using Chat.Interfaces;
 using MongoDB.Driver;
 using StackExchange.Redis;
@@ -50,7 +48,7 @@ namespace Chat.Implementations
 
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
 
-            services.AddSingleton<MongoDbService>();
+            services.AddScoped<MongoDbService>();
         }
     }
 }
