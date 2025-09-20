@@ -1,7 +1,6 @@
-using ChatService.Domain;
+using ChatService.Domain.Dto;
 using ChatService.Implementations;
 using ChatService.Repositories.Implementations;
-using ChatService.Services;
 using Kafka.Implementations;
 using Redis.Implementations;
 
@@ -21,8 +20,7 @@ namespace ChatService
             builder.Services.AddRedis(builder.Configuration);
             builder.Services.AddMongo(builder.Configuration);
 
-            builder.Services.AddProducer<Message>(builder.Configuration.GetSection("KafkaSettings"));
-            builder.Services.AddConsumer<Message, MessageHandler>(builder.Configuration.GetSection("KafkaSettings"));
+            builder.Services.AddProducer<MessageSendedDto>(builder.Configuration.GetSection("KafkaSettings"));
 
             var app = builder.Build();
 

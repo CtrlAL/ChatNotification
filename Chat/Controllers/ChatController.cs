@@ -1,6 +1,8 @@
 ﻿using ChatService.Repositories.Interfaces;
 using ChatService.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Kafka.Interfaces;
+using ChatService.Domain.Dto;
 
 namespace ChatService.Controllers
 {
@@ -9,10 +11,12 @@ namespace ChatService.Controllers
     public class ChatController : ControllerBase
     {
         private readonly IChatMessageRepository _messageRepository;
+        private readonly IMessageProducer<MessageSendedDto> _messageProducer;
 
-        public ChatController(IChatMessageRepository messageRepository)
+        public ChatController(IChatMessageRepository messageRepository, IMessageProducer<MessageSendedDto> messageProducer)
         {
             _messageRepository = messageRepository;
+            _messageProducer = messageProducer;
         }
 
         [HttpPost("send")]
@@ -21,7 +25,15 @@ namespace ChatService.Controllers
             if (string.IsNullOrWhiteSpace(message.Text))
                 return BadRequest("Сообщение не может быть пустым.");
 
-            await _messageRepository.CreateAsync(message);
+            var result = await _messageRepository.CreateAsync(message);
+
+            await _messageProducer.ProduceAsync(
+                new MessageSendedDto { 
+                    ChatId = result.ChatId,
+                    MessageId = result.Id,
+                    SendTime = DateTime.UtcNow,
+                }, 
+                default);
 
             return Ok("Сообщение отправлено");
         }

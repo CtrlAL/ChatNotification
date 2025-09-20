@@ -1,11 +1,11 @@
-﻿using ChatService.Domain;
+﻿using ChatService.Domain.Dto;
 using Kafka.Interfaces;
 
 namespace ChatService.Services
 {
-    public class MessageHandler : IMessageHandler<Message>
+    public class MessageHandler : IMessageHandler<MessageSendedDto>
     {
-        public Task HandleAsync(Message message, CancellationToken cancellationToken)
+        public Task HandleAsync(MessageSendedDto message, CancellationToken cancellationToken)
         {
             Console.WriteLine(message.Conent);
 
