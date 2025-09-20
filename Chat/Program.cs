@@ -1,6 +1,7 @@
 using Chat.Domain;
 using Chat.Implementations;
 using Chat.Repositories.Implementations;
+using Chat.Services;
 using Kafka.Implementations;
 using Redis.Implementations;
 
@@ -15,10 +16,13 @@ namespace Chat
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddProducer<Message>(builder.Configuration);
+
+            builder.Services.AddRepositrories();
             builder.Services.AddRedis(builder.Configuration);
             builder.Services.AddMongo(builder.Configuration);
-            builder.Services.AddRepositrories();
+
+            builder.Services.AddProducer<Message>(builder.Configuration.GetSection("KafkaSettings"));
+            builder.Services.AddConsumer<Message, MessageHandler>(builder.Configuration.GetSection("KafkaSettings"));
 
             var app = builder.Build();
 
