@@ -16,15 +16,13 @@ namespace ChatService.Implementations
                 return new MongoClient(connectionString);
             });
 
-            services.AddScoped<IMongoDatabase>(sp =>
+            services.AddScoped(sp =>
             {
                 var client = sp.GetRequiredService<IMongoClient>();
                 var options = sp.GetRequiredService<IOptions<MongoDbSettings>>();
                 var databaseName = options.Value.DatabaseName;
                 return client.GetDatabase(databaseName);
             });
-
-            services.AddScoped<MongoDbService>();
         }
     }
 }

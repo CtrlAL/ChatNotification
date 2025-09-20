@@ -2,7 +2,7 @@
 
 namespace ChatService.Domain
 {
-    public class ChatMessage
+    public class ChatMessage : IMongoModel
     {
         [BsonId]
         public int Id { get; set; }
