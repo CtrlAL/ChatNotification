@@ -1,9 +1,9 @@
-﻿using Chat.Domain;
+﻿using ChatService.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Redis.Interfaces;
 using System.Text.Json;
 
-namespace Chat.Controllers
+namespace ChatService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

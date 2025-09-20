@@ -1,4 +1,4 @@
-﻿namespace Chat.Configs
+﻿namespace ChatService.Configs
 {
     public class MongoDbSettings
     {

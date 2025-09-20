@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Chat.Domain
+namespace ChatService.Domain
 {
     public class ChatMessage
     {

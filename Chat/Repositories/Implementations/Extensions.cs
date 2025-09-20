@@ -1,6 +1,6 @@
-﻿using Chat.Repositories.Interfaces;
+﻿using ChatService.Repositories.Interfaces;
 
-namespace Chat.Repositories.Implementations
+namespace ChatService.Repositories.Implementations
 {
     public static class Extensions
     {

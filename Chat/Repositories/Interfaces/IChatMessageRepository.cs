@@ -1,6 +1,6 @@
-﻿using Chat.Domain;
+﻿using ChatService.Domain;
 
-namespace Chat.Repositories.Interfaces
+namespace ChatService.Repositories.Interfaces
 {
     public interface IChatMessageRepository
     {

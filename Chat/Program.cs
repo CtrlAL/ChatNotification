@@ -1,11 +1,11 @@
-using Chat.Domain;
-using Chat.Implementations;
-using Chat.Repositories.Implementations;
-using Chat.Services;
+using ChatService.Domain;
+using ChatService.Implementations;
+using ChatService.Repositories.Implementations;
+using ChatService.Services;
 using Kafka.Implementations;
 using Redis.Implementations;
 
-namespace Chat
+namespace ChatService
 {
     public class Program
     {

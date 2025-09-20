@@ -1,4 +1,4 @@
-﻿namespace Chat.Domain
+﻿namespace ChatService.Domain
 {
     public class Message
     {

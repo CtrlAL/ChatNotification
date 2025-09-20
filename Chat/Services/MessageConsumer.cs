@@ -1,7 +1,7 @@
-﻿using Chat.Domain;
+﻿using ChatService.Domain;
 using Kafka.Interfaces;
 
-namespace Chat.Services
+namespace ChatService.Services
 {
     public class MessageHandler : IMessageHandler<Message>
     {

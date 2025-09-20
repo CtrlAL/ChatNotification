@@ -1,8 +1,8 @@
-﻿using Chat.Configs;
+﻿using ChatService.Configs;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Chat.Implementations
+namespace ChatService.Implementations
 {
     public static class Extensions
     {

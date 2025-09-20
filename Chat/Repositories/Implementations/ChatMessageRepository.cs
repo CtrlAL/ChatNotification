@@ -1,9 +1,9 @@
-﻿using Chat.Implementations;
-using Chat.Repositories.Interfaces;
-using Chat.Domain;
+﻿using ChatService.Implementations;
+using ChatService.Repositories.Interfaces;
+using ChatService.Domain;
 using MongoDB.Driver;
 
-namespace Chat.Repositories.Implementations
+namespace ChatService.Repositories.Implementations
 {
     public class ChatMessageRepository : IChatMessageRepository
     {

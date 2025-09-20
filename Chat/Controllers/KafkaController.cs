@@ -1,8 +1,8 @@
-using Chat.Domain;
+using ChatService.Domain;
 using Kafka.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chat.Controllers
+namespace ChatService.Controllers
 {
     [ApiController]
     [Route("[controller]")]

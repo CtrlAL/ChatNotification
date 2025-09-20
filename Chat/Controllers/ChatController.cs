@@ -1,8 +1,8 @@
-﻿using Chat.Repositories.Interfaces;
-using Chat.Domain;
+﻿using ChatService.Repositories.Interfaces;
+using ChatService.Domain;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chat.Controllers
+namespace ChatService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
