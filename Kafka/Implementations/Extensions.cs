@@ -9,7 +9,7 @@ namespace Kafka.Implementations
     {
         public static void AddProducer<TMessage>(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.Configure<KafkaSettings>(configuration.GetSection("KafkaSettings"));
+            services.Configure<KafkaSettings>(configuration.GetSection("KafkaSettings"));
             services.AddScoped<IMessageProducer<TMessage>, MessageProducer<TMessage>>();
         }
     }

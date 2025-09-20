@@ -2,11 +2,10 @@
 
 namespace Chat.Domain
 {
-    public class ChatMessage
+    public class Chat
     {
         [BsonId]
         public int Id { get; set; }
-        public int ChatId { get; set; }
-        public string Text {  get; set; }
+        public ICollection<ChatMessage> Chats { get; set; }
     }
 }

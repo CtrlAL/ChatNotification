@@ -9,11 +9,11 @@ namespace Redis.Implementations
     {
         public static void AddRedis(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddStackExchangeRedisCache(options =>
-            //{
-            //    options.Configuration = configuration.GetConnectionString("RedisConnection");
-            //    options.InstanceName = "MyTestAppName";
-            //});
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("RedisConnection");
+                options.InstanceName = "MyTestAppName";
+            });
 
             services.AddSingleton<IConnectionMultiplexer>(sp =>
             {
