@@ -6,6 +6,5 @@ namespace Chat.Domain
     {
         [BsonId]
         public int Id { get; set; }
-        public ICollection<ChatMessage> Chats { get; set; }
     }
 }
