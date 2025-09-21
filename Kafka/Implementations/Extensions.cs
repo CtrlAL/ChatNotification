@@ -18,7 +18,7 @@ namespace Kafka.Implementations
         {
             services.Configure<KafkaSettings>(section);
             services.AddHostedService<KafkaConsumer<TMessage>>();
-            services.AddScoped<IMessageHandler<TMessage>, THandler>();
+            services.AddSingleton<IMessageHandler<TMessage>, THandler>();
         }
     }
 }
