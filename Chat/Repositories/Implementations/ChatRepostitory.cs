@@ -9,5 +9,10 @@ namespace ChatService.Repositories.Implementations
         public ChatRepostitory(IMongoCollection<Chat> collection) : base(collection)
         {
         }
+
+        protected override IAsyncCursor<Chat> FilterAsync(IAsyncCursor<Chat> cursor)
+        {
+            return base.FilterAsync(cursor);
+        }
     }
 }

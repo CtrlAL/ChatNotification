@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace ChatService.Repositories.Implementations
 {
-    public class MongoRepository<TModel> : IMongoRepository<TModel>
+    public abstract class MongoRepository<TModel> : IMongoRepository<TModel>
         where TModel : class, IMongoModel
     {
         private readonly IMongoCollection<TModel> _collection;
@@ -23,7 +23,8 @@ namespace ChatService.Repositories.Implementations
         public async Task<List<TModel>> GetAsync()
         {
             var list = await _collection.FindAsync(x => true);
-            return list.ToList();
+
+            return FilterAsync(list).ToList();
         }
 
         public async Task<TModel> GetAsync(int id)
@@ -40,6 +41,11 @@ namespace ChatService.Repositories.Implementations
         public async Task UpdateAsync(int id, TModel message)
         {
             await _collection.ReplaceOneAsync(x => x.Id == id, message);
+        }
+
+        protected virtual IAsyncCursor<TModel> FilterAsync(IAsyncCursor<TModel> cursor)
+        {
+            return cursor;
         }
     }
 }
