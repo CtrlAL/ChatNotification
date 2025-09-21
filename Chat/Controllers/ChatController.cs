@@ -3,6 +3,7 @@ using ChatService.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Kafka.Interfaces;
 using ChatService.Domain.Dto;
+using ChatService.Models;
 
 namespace ChatService.Controllers
 {
@@ -24,18 +25,20 @@ namespace ChatService.Controllers
         }
 
         [HttpPost("create-chat")]
-        public async Task<ActionResult<string>> CreateChat([FromBody] Chat message)
+        public async Task<ActionResult<string>> CreateChat()
         {
-            var result = await _chatRepository.CreateAsync(message);
+            var result = await _chatRepository.CreateAsync(new());
 
             return Ok(result.Id);
         }
 
         [HttpPost("send")]
-        public async Task<IActionResult> SendMessage([FromBody] ChatMessage message)
+        public async Task<IActionResult> SendMessage([FromBody] ChatMessageModel message)
         {
             if (string.IsNullOrWhiteSpace(message.Text))
                 return BadRequest("Сообщение не может быть пустым.");
+
+            var entity = ChatMessageModel.FromModel(message);
 
             var result = await _messageRepository.CreateAsync(message);
 
