@@ -23,6 +23,7 @@ namespace Kafka.Implementations
             _topic = options.Value.Topic;
 
             _consumer = new ConsumerBuilder<string, TMessage>(config)
+                .SetValueDeserializer(new MessageDeserializer<TMessage>())
                 .Build();
 
             _messageHandler = messageHandler;
