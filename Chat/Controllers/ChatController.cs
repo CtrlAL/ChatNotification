@@ -10,13 +10,25 @@ namespace ChatService.Controllers
     [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
+        private readonly IChatRepository _chatRepository;
         private readonly IChatMessageRepository _messageRepository;
         private readonly IMessageProducer<MessageSendedDto> _messageProducer;
 
-        public ChatController(IChatMessageRepository messageRepository, IMessageProducer<MessageSendedDto> messageProducer)
+        public ChatController(IChatMessageRepository messageRepository, 
+            IMessageProducer<MessageSendedDto> messageProducer, 
+            IChatRepository chatRepository)
         {
             _messageRepository = messageRepository;
             _messageProducer = messageProducer;
+            _chatRepository = chatRepository;
+        }
+
+        [HttpPost("create-chat")]
+        public async Task<ActionResult<string>> CreateChat([FromBody] Chat message)
+        {
+            var result = await _chatRepository.CreateAsync(message);
+
+            return Ok(result.Id);
         }
 
         [HttpPost("send")]
