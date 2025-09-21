@@ -8,7 +8,7 @@ namespace ChatService.Domain
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public int ChatId { get; set; }
+        public string ChatId { get; set; }
         public string Text {  get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class MessageSendedDto
     {
-        public int ChatId { get; set; }
-        public int MessageId { get; set; }
+        public string ChatId { get; set; }
+        public string MessageId { get; set; }
         public DateTime SendTime { get; set; }
     }
 }

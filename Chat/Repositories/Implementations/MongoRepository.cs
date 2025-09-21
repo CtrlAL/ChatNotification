@@ -27,19 +27,19 @@ namespace ChatService.Repositories.Implementations
             return FilterAsync(list, filter).ToList();
         }
 
-        public async Task<TModel> GetAsync(int id)
+        public async Task<TModel> GetAsync(string id)
         {
             var list = await _collection.FindAsync(x => x.Id == id);
 
             return list.FirstOrDefault();
         }
 
-        public async Task RemoveAsync(int id)
+        public async Task RemoveAsync(string id)
         {
             await _collection.DeleteOneAsync(x => x.Id == id);
         }
 
-        public async Task UpdateAsync(int id, TModel message)
+        public async Task UpdateAsync(string id, TModel message)
         {
             await _collection.ReplaceOneAsync(x => x.Id == id, message);
         }
