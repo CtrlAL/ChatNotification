@@ -40,7 +40,7 @@ namespace ChatService.Controllers
 
             var entity = ChatMessageModel.FromModel(message);
 
-            var result = await _messageRepository.CreateAsync(message);
+            var result = await _messageRepository.CreateAsync(entity);
 
             await _messageProducer.ProduceAsync(
                 new MessageSendedDto { 
