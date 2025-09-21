@@ -9,11 +9,12 @@ namespace NotificationService
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var config = builder.Configuration;
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddConsumer<MessageSendedDto, ConsoleNotificationHandler>();
+            builder.Services.AddConsumer<MessageSendedDto, ConsoleNotificationHandler>(config.GetSection("KafkaSettings"));
 
             var app = builder.Build();
 
