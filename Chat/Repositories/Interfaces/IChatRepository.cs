@@ -2,7 +2,7 @@
 
 namespace ChatService.Repositories.Interfaces
 {
-    public interface IChatRepository : IMongoRepository<Chat>
+    public interface IChatRepository : IMongoRepository<Chat, object>
     {
     }
 }
