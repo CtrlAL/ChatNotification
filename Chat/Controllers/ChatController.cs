@@ -41,7 +41,8 @@ namespace ChatService.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory()
         {
-            var history = await _messageRepository.GetAsync();
+            var history = await _messageRepository.GetAsync(filter: new());
+
             return Ok(history ?? new List<ChatMessage>());
         }
     }
