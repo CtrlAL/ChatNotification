@@ -5,6 +5,6 @@ namespace ChatService.Domain
     public class Chat : IMongoModel
     {
         [BsonId]
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }
