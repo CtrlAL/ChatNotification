@@ -7,8 +7,13 @@ namespace ChatService.Domain
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-        public string ChatId { get; set; }
-        public string Text {  get; set; }
+        [BsonIgnoreIfDefault]
+        public string Id { get; set; } = null!;
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ChatId { get; set; } = null!;
+
+        [BsonRequired]
+        public string Text { get; set; } = null!;
     }
 }
