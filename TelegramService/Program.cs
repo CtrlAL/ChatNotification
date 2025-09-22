@@ -1,8 +1,6 @@
 using Kafka.Implementations;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-using TelegramService.Configs;
 using TelegramService.Domain;
+using TelegramService.Extensions;
 using TelegramService.NotificationHandler;
 
 namespace TelegramService;

@@ -2,7 +2,7 @@
 using Telegram.Bot;
 using TelegramService.Configs;
 
-namespace TelegramService
+namespace TelegramService.Extensions
 {
     public static class Extensions
     {
