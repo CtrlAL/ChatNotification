@@ -20,9 +20,16 @@ namespace TelegramService.NotificationHandler
 
         public async Task HandleAsync(MessageSendedDto message, CancellationToken cancellationToken)
         {
-            var text = NotificationPatterns.ConsoleNotificationPattern(message);
+            try
+            {
+                var text = NotificationPatterns.ConsoleNotificationPattern(message);
 
-            await _botClient.SendMessage(chatId: _settings.ChatId, text: message.SendTime.ToString());
+                await _botClient.SendMessage(chatId: _settings.ChatId, text: message.SendTime.ToString());
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
     }
 }

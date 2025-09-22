@@ -2,7 +2,7 @@
 {
     public class TelegramSettigns
     {
-        public string ChatId { get; set; }
+        public long ChatId { get; set; }
         public string BotToken { get; set; }
     }
 }
