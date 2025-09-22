@@ -4,6 +4,7 @@ using Kafka.Interfaces;
 using ChatService.Domain.Dto;
 using ChatService.Infrastructure.Models.Create;
 using ChatService.Infrastructure.Models.Get;
+using ChatService.Infrastructure.Models.Get.Response;
 
 namespace ChatService.Controllers
 {
@@ -25,15 +26,15 @@ namespace ChatService.Controllers
         }
 
         [HttpPost("create-chat")]
-        public async Task<ActionResult<GetChatModel>> CreateChat()
+        public async Task<ActionResult<CreateResponse>> CreateChat()
         {
             var result = await _chatRepository.CreateAsync(new());
 
-            return Ok(GetChatModel.ToModel(result));
+            return Ok(new CreateResponse(result));
         }
 
         [HttpPost("send-message")]
-        public async Task<ActionResult<GetChatMessageModel?>> SendMessage([FromBody] ChatMessageModel message)
+        public async Task<ActionResult<CreateResponse>> SendMessage([FromBody] ChatMessageModel message)
         {
             if (string.IsNullOrWhiteSpace(message.Text))
                 return BadRequest("Сообщение не может быть пустым.");
@@ -52,7 +53,7 @@ namespace ChatService.Controllers
 
             var resultModel =  GetChatMessageModel.ToModel(result);
 
-            return Ok(resultModel);
+            return Ok(new CreateResponse(result));
         }
 
         [HttpGet("message-list")]
