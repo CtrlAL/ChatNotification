@@ -57,19 +57,21 @@ namespace ChatService.Controllers
         }
 
         [HttpGet("message-list")]
-        public async Task<ActionResult<List<GetChatMessageModel>>> GetMessageList()
+        public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> GetMessageList()
         {
-            var result = (await _messageRepository.GetAsync(filter: new())).Select(GetChatMessageModel.ToModel);
+            var result = (await _messageRepository.GetAsync(filter: new())).Select(GetChatMessageModel.ToModel).ToList();
+            var searchResult = new SearchResultResponse<GetChatMessageModel>(result ?? new List<GetChatMessageModel>());
 
-            return Ok(result ?? new List<GetChatMessageModel>());
+            return Ok(searchResult);
         }
 
         [HttpPost("chat-list")]
-        public async Task<ActionResult<List<GetChatModel>>> GetChatList()
+        public async Task<ActionResult<SearchResultResponse<GetChatModel>>> GetChatList()
         {
-            var result = (await _chatRepository.GetAsync(filter: new())).Select(GetChatModel.ToModel);
+            var result = (await _chatRepository.GetAsync(filter: new())).Select(GetChatModel.ToModel).ToList();
+            var searchResult = new SearchResultResponse<GetChatModel>(result ?? new List<GetChatModel>());
 
-            return Ok(result ?? new List<GetChatModel>());
+            return Ok(searchResult);
         }
     }
 }
