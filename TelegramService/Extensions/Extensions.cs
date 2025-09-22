@@ -9,7 +9,7 @@ namespace TelegramService.Extensions
         public static void AddTelegramClient(this IServiceCollection services, IConfigurationSection section)
         {
             services.Configure<TelegramSettigns>(section);
-            services.AddScoped<ITelegramBotClient>(sp =>
+            services.AddSingleton<ITelegramBotClient>(sp =>
             {
                 var settings = sp.GetRequiredService<IOptions<TelegramSettigns>>();
                 return new TelegramBotClient(settings.Value.BotToken);
