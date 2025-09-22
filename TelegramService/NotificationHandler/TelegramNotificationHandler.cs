@@ -24,7 +24,7 @@ namespace TelegramService.NotificationHandler
             {
                 var text = NotificationPatterns.ConsoleNotificationPattern(message);
 
-                await _botClient.SendMessage(chatId: _settings.ChatId, text: message.SendTime.ToString());
+                await _botClient.SendMessage(chatId: _settings.ChatId, text: text);
             }
             catch(Exception ex)
             {
