@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using TelegramService.Configs;
 using TelegramService.Domain;
+using TelegramService.Patterns;
 
 namespace TelegramService.NotificationHandler
 {
@@ -19,6 +20,8 @@ namespace TelegramService.NotificationHandler
 
         public async Task HandleAsync(MessageSendedDto message, CancellationToken cancellationToken)
         {
+            var text = NotificationPatterns.ConsoleNotificationPattern(message);
+
             await _botClient.SendMessage(chatId: _settings.ChatId, text: message.SendTime.ToString());
         }
     }
