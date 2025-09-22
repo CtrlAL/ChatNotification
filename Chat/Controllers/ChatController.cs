@@ -3,7 +3,7 @@ using ChatService.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Kafka.Interfaces;
 using ChatService.Domain.Dto;
-using ChatService.Models;
+using ChatService.Infrastructure.Models.Create;
 
 namespace ChatService.Controllers
 {

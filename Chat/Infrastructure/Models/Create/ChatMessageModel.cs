@@ -1,10 +1,9 @@
 ﻿using ChatService.Domain;
 
-namespace ChatService.Models
+namespace ChatService.Infrastructure.Models.Create
 {
     public class ChatMessageModel
     {
-        public string? Id { get; set; }
         public string ChatId { get; set; }
         public string Text { get; set; }
 
@@ -12,7 +11,6 @@ namespace ChatService.Models
         {
             return new ChatMessageModel
             {
-                Id = entity.Id,
                 ChatId = entity.ChatId,
                 Text = entity.Text,
             };
@@ -22,7 +20,6 @@ namespace ChatService.Models
         {
             return new ChatMessage
             {
-                Id = model.Id,
                 ChatId = model.ChatId,
                 Text = model.Text,
             };
