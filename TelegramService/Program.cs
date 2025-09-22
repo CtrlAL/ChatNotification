@@ -1,4 +1,7 @@
 using Kafka.Implementations;
+using Microsoft.Extensions.Options;
+using Telegram.Bot;
+using TelegramService.Configs;
 using TelegramService.Domain;
 using TelegramService.NotificationHandler;
 
@@ -16,7 +19,9 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
         builder.Services.AddConsumer<MessageSendedDto, TelegramNotificationHandler>(config.GetSection("KafkaSettings"));
+        builder.Services.AddTelegramClient(config.GetSection("Telegram"));
 
         var app = builder.Build();
 
