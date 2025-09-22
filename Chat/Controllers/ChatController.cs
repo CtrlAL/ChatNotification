@@ -25,11 +25,11 @@ namespace ChatService.Controllers
         }
 
         [HttpPost("create-chat")]
-        public async Task<ActionResult<string>> CreateChat()
+        public async Task<ActionResult<GetChatModel>> CreateChat()
         {
             var result = await _chatRepository.CreateAsync(new());
 
-            return Ok(result.Id);
+            return Ok(GetChatModel.ToModel(result));
         }
 
         [HttpPost("send-message")]
