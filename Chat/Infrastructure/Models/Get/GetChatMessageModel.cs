@@ -17,15 +17,5 @@ namespace ChatService.Infrastructure.Models.Get
                 Text = entity.Text,
             };
         }
-
-        public static ChatMessage FromModel(GetChatMessageModel model)
-        {
-            return new ChatMessage
-            {
-                Id = model.Id,
-                ChatId = model.ChatId,
-                Text = model.Text,
-            };
-        }
     }
 }

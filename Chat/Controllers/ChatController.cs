@@ -1,9 +1,9 @@
 ﻿using ChatService.Repositories.Interfaces;
-using ChatService.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Kafka.Interfaces;
 using ChatService.Domain.Dto;
 using ChatService.Infrastructure.Models.Create;
+using ChatService.Infrastructure.Models.Get;
 
 namespace ChatService.Controllers
 {
@@ -32,8 +32,8 @@ namespace ChatService.Controllers
             return Ok(result.Id);
         }
 
-        [HttpPost("send")]
-        public async Task<IActionResult> SendMessage([FromBody] ChatMessageModel message)
+        [HttpPost("send-message")]
+        public async Task<ActionResult<GetChatMessageModel?>> SendMessage([FromBody] ChatMessageModel message)
         {
             if (string.IsNullOrWhiteSpace(message.Text))
                 return BadRequest("Сообщение не может быть пустым.");
@@ -50,15 +50,25 @@ namespace ChatService.Controllers
                 }, 
                 default);
 
-            return Ok("Сообщение отправлено");
+            var resultModel =  GetChatMessageModel.ToModel(result);
+
+            return Ok(resultModel);
         }
 
-        [HttpGet("history")]
-        public async Task<IActionResult> GetHistory()
+        [HttpGet("message-list")]
+        public async Task<ActionResult<List<GetChatMessageModel>>> GetMessageList()
         {
-            var history = await _messageRepository.GetAsync(filter: new());
+            var result = (await _messageRepository.GetAsync(filter: new())).Select(GetChatMessageModel.ToModel);
 
-            return Ok(history ?? new List<ChatMessage>());
+            return Ok(result ?? new List<GetChatMessageModel>());
+        }
+
+        [HttpPost("chat-list")]
+        public async Task<ActionResult<List<GetChatModel>>> GetChatList()
+        {
+            var result = (await _chatRepository.GetAsync(filter: new())).Select(GetChatModel.ToModel);
+
+            return Ok(result ?? new List<GetChatModel>());
         }
     }
 }

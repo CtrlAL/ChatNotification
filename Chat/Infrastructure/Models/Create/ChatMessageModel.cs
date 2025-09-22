@@ -7,15 +7,6 @@ namespace ChatService.Infrastructure.Models.Create
         public string ChatId { get; set; }
         public string Text { get; set; }
 
-        public static ChatMessageModel ToModel(ChatMessage entity)
-        {
-            return new ChatMessageModel
-            {
-                ChatId = entity.ChatId,
-                Text = entity.Text,
-            };
-        }
-
         public static ChatMessage FromModel(ChatMessageModel model)
         {
             return new ChatMessage

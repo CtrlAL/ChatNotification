@@ -6,11 +6,11 @@ namespace ChatService.Infrastructure.Models.Get
     {
         public string Id { get; set; }
 
-        public static Chat FromModel(GetChatModel model)
+        public static GetChatModel ToModel(Chat entity)
         {
-            return new Chat
+            return new GetChatModel
             {
-                Id = model.Id,
+                Id = entity.Id,
             };
         }
     }
