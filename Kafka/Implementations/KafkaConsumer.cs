@@ -17,7 +17,7 @@ namespace Kafka.Implementations
             var config = new ConsumerConfig
             {
                 BootstrapServers = options.Value.BootstrapServers,
-                GroupId = options.Value.GruopId
+                GroupId = options.Value.GroupId,
             };
 
             _topic = options.Value.Topic;
