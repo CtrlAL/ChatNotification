@@ -29,6 +29,7 @@ namespace KeycloakAuth
 
         public static void AddKeyCloakClient(this IServiceCollection services, IConfigurationSection section, string clientName)
         {
+            services.Configure<KeyCloakSettings>(section);
             services.AddHttpClient(clientName, (sp, client) => ConfigureClient(sp, client));
         }
 
