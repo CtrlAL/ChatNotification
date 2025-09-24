@@ -1,5 +1,6 @@
 using KeycloakAuth;
 using RegistrationService.Constants;
+using RegistrationService.Services;
 
 namespace RegistrationService;
 
@@ -18,6 +19,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddKeyCloakClient(keycloak, KeycloakConstants.HttpClientName);
+        builder.Services.AddScoped<IKeyCloakManager, KeycloakManager>();
 
         var app = builder.Build();
 

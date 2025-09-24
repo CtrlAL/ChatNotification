@@ -12,10 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppHost\AppHost.ServiceDefaults\AppHost.ServiceDefaults.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\KeycloakAuth\KeycloakAuth.csproj" />
   </ItemGroup>
 
 </Project>
