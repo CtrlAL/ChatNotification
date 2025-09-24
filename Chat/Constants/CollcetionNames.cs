@@ -4,5 +4,6 @@
     {
         public const string Chats = "Chats";
         public const string ChatMessages = "ChatMessages";
+        public const string Users = "Users";
     }
 }

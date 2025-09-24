@@ -7,7 +7,7 @@ namespace ChatService.Repositories.Implementations
     public abstract class MongoRepository<TModel, TFilter> : IMongoRepository<TModel, TFilter>
         where TModel : class, IMongoModel
     {
-        private readonly IMongoCollection<TModel> _collection;
+        protected readonly IMongoCollection<TModel> _collection;
 
         public MongoRepository(IMongoCollection<TModel> collection)
         {

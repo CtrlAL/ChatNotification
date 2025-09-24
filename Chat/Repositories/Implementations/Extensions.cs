@@ -9,14 +9,11 @@ namespace ChatService.Repositories.Implementations
     {
         public static void AddRepositrories(this IServiceCollection services)
         {
-            services.AddColection<Chat>(CollcetionNames.Chats);
-            services.AddColection<ChatMessage>(CollcetionNames.ChatMessages);
-
-            services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
-            services.AddScoped<IChatRepository, ChatRepostitory>();
+            services.AddMongoRepository<Chat, object, IChatRepository, ChatRepostitory>(CollcetionNames.Chats);
+            services.AddMongoRepository<ChatMessage, object, IChatMessageRepository, ChatMessageRepository>(CollcetionNames.Chats);
         }
 
-        private static void AddColection<TModel>(this IServiceCollection services, string collectionName)
+        private static void AddCollection<TModel>(this IServiceCollection services, string collectionName)
             where TModel : class
         {
             services.AddScoped(sp =>
@@ -24,6 +21,17 @@ namespace ChatService.Repositories.Implementations
                 var database = sp.GetRequiredService<IMongoDatabase>();
                 return database.GetCollection<TModel>(collectionName);
             });
+        }
+
+        public static void AddMongoRepository<TModel, TFilter, TInterface, TImplementation>(
+            this IServiceCollection services,
+            string collectionName)
+            where TModel : class, IMongoModel
+            where TInterface : class, IMongoRepository<TModel, TFilter>
+            where TImplementation : class, TInterface
+        {
+            services.AddCollection<TModel>(collectionName);
+            services.AddScoped<TInterface, TImplementation>();
         }
     }
 }
