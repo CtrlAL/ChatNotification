@@ -2,6 +2,7 @@ using ChatService.Domain.Dto;
 using ChatService.Implementations;
 using ChatService.Repositories.Implementations;
 using Kafka.Implementations;
+using KeycloakAuth;
 using Redis.Implementations;
 
 namespace ChatService
@@ -21,6 +22,7 @@ namespace ChatService
             builder.Services.AddMongo(builder.Configuration);
 
             builder.Services.AddProducer<MessageSendedDto>(builder.Configuration.GetSection("KafkaSettings"));
+            builder.Services.AddKeyCloak(builder.Configuration.GetSection("KeyCloak"));
 
             var app = builder.Build();
 
@@ -32,8 +34,8 @@ namespace ChatService
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
