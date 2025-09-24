@@ -5,10 +5,12 @@ using ChatService.Domain.Dto;
 using ChatService.Infrastructure.Models.Create;
 using ChatService.Infrastructure.Models.Get;
 using ChatService.Infrastructure.Models.Get.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChatService.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
