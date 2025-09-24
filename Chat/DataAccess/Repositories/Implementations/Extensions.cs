@@ -23,7 +23,7 @@ namespace ChatService.DataAccess.Repositories.Implementations
         {
             services.AddScoped(sp =>
             {
-                var database = sp.GetRequiredService<IMongoDataAccess>();
+                var database = sp.GetRequiredService<IMongoDatabase>();
                 return database.GetCollection<TModel>(collectionName);
             });
         }

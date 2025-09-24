@@ -5,6 +5,7 @@ using Kafka.Implementations;
 using KeycloakAuth;
 using Microsoft.OpenApi.Models;
 using Redis.Implementations;
+using ChatService.Services.Extensions;
 
 namespace ChatService
 {
@@ -30,24 +31,26 @@ namespace ChatService
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
             builder.Services.AddRepositrories();
             builder.Services.AddRedis(builder.Configuration);
             builder.Services.AddMongoDB(builder.Configuration);
+            builder.Services.AddSignalR();
+            builder.Services.AddServices();
 
             builder.Services.AddProducer<MessageSendedDto>(builder.Configuration.GetSection("KafkaSettings"));
             builder.Services.AddKeyCloak(builder.Configuration.GetSection("KeyCloak"));
