@@ -9,8 +9,13 @@ namespace ChatService.Repositories.Implementations
     {
         public static void AddRepositrories(this IServiceCollection services)
         {
-            services.AddMongoRepository<Chat, object, IChatRepository, ChatRepostitory>(CollcetionNames.Chats);
-            services.AddMongoRepository<ChatMessage, object, IChatMessageRepository, ChatMessageRepository>(CollcetionNames.Chats);
+            services.AddMongoRepository<Chat, object, IChatRepository, ChatRepostitory>(
+                CollcetionNames.Chats
+            );
+
+            services.AddMongoRepository<ChatMessage, object, IChatMessageRepository, ChatMessageRepository>(
+                CollcetionNames.Chats
+            );
         }
 
         private static void AddCollection<TModel>(this IServiceCollection services, string collectionName)
