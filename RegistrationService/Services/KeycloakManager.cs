@@ -31,7 +31,7 @@ namespace RegistrationService.Services
             };
 
             var response = await client.PostAsync(
-                $"realms/master/protocol/openid-connect/token",
+                $"realms/{_settings.Realm}/protocol/openid-connect/token",
                 new FormUrlEncodedContent(tokenRequest));
 
             response.EnsureSuccessStatusCode();
