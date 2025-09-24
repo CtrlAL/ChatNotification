@@ -1,6 +1,6 @@
+using ChatService.DataAccess.Extensions;
+using ChatService.DataAccess.Repositories.Implementations;
 using ChatService.Domain.Dto;
-using ChatService.Implementations;
-using ChatService.Repositories.Implementations;
 using Kafka.Implementations;
 using KeycloakAuth;
 using Microsoft.OpenApi.Models;
@@ -47,7 +47,7 @@ namespace ChatService
 
             builder.Services.AddRepositrories();
             builder.Services.AddRedis(builder.Configuration);
-            builder.Services.AddMongo(builder.Configuration);
+            builder.Services.AddMongoDB(builder.Configuration);
 
             builder.Services.AddProducer<MessageSendedDto>(builder.Configuration.GetSection("KafkaSettings"));
             builder.Services.AddKeyCloak(builder.Configuration.GetSection("KeyCloak"));
