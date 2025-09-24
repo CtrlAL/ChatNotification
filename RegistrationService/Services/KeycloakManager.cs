@@ -19,7 +19,7 @@ namespace RegistrationService.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        private async Task<string> GetAdminAccessTokenAsync()
+        private async Task<string> GetServiceAccountTokenAsync()
         {
             var client = _httpClientFactory.CreateClient(KeycloakConstants.HttpClientName);
 
@@ -38,12 +38,12 @@ namespace RegistrationService.Services
             var json = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(json);
             return doc.RootElement.GetProperty("access_token").GetString()
-                   ?? throw new InvalidOperationException("Access token is missing");
+                   ?? throw new InvalidOperationException("Access token missing");
         }
 
         public async Task RegisterUserAsync(string email, string username, string password)
         {
-            var accessToken = await GetAdminAccessTokenAsync();
+            var accessToken = await GetServiceAccountTokenAsync();
             var client = _httpClientFactory.CreateClient(KeycloakConstants.HttpClientName);
             client.DefaultRequestHeaders.Authorization = new("Bearer", accessToken);
 
@@ -71,7 +71,7 @@ namespace RegistrationService.Services
 
         public async Task ResetPasswordAsync(string username, string newPassword)
         {
-            var accessToken = await GetAdminAccessTokenAsync();
+            var accessToken = await GetServiceAccountTokenAsync();
             var client = _httpClientFactory.CreateClient(KeycloakConstants.HttpClientName);
             client.DefaultRequestHeaders.Authorization = new("Bearer", accessToken);
 
