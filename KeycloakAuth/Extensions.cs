@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace KeycloakAuth
 {
@@ -24,6 +25,16 @@ namespace KeycloakAuth
             });
 
             services.AddAuthorization();
+        }
+
+        public static void AddKeyCloakClient(this IServiceCollection services, IConfigurationSection section, string clientName)
+        {
+            services.AddHttpClient(clientName, (sp, client) =>
+            {
+                var settings = sp.GetRequiredService<IOptions<KeyCloakSettings>>().Value;
+                client.BaseAddress = new Uri($"http://{settings.Host}:{settings.Port}/");
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
         }
     }
 }

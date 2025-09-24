@@ -1,6 +1,6 @@
 ﻿namespace KeycloakAuth
 {
-    internal class KeyCloakSettings
+    public class KeyCloakSettings
     {
         public string Realm { get; set; }
         public string Audience { get; set; }

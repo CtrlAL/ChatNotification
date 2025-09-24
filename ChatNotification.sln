@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramService", "Telegram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeycloakAuth", "KeycloakAuth\KeycloakAuth.csproj", "{B2FA0380-DE22-42CF-9BE8-1A8D6C41E3E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistrationService", "RegistrationService\RegistrationService.csproj", "{4EFD896F-48DC-2915-3214-AF609094A933}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{B2FA0380-DE22-42CF-9BE8-1A8D6C41E3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2FA0380-DE22-42CF-9BE8-1A8D6C41E3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2FA0380-DE22-42CF-9BE8-1A8D6C41E3E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EFD896F-48DC-2915-3214-AF609094A933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EFD896F-48DC-2915-3214-AF609094A933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EFD896F-48DC-2915-3214-AF609094A933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EFD896F-48DC-2915-3214-AF609094A933}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{A44B59D8-96FB-619A-CC79-5D8F9B3D108A} = {028B2652-B6C1-417E-B447-7E21CA1AB462}
 		{4DCBE486-B495-510D-B3E2-16626746C1AC} = {AB000C5A-CA8F-4406-B71B-D731CF1CF5AD}
 		{B2FA0380-DE22-42CF-9BE8-1A8D6C41E3E1} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{4EFD896F-48DC-2915-3214-AF609094A933} = {AB000C5A-CA8F-4406-B71B-D731CF1CF5AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {012590C8-3493-4BB0-A543-5757D83ECD0A}
