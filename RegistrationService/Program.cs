@@ -10,7 +10,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var config = builder.Configuration;
-        var keycloak = config.GetSection("KeyCloakAdmin");
+        var keycloak = config.GetSection("KeyCloak");
 
         builder.AddServiceDefaults();
 

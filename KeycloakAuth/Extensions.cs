@@ -29,12 +29,14 @@ namespace KeycloakAuth
 
         public static void AddKeyCloakClient(this IServiceCollection services, IConfigurationSection section, string clientName)
         {
-            services.AddHttpClient(clientName, (sp, client) =>
-            {
-                var settings = sp.GetRequiredService<IOptions<KeyCloakSettings>>().Value;
-                client.BaseAddress = new Uri($"http://{settings.Host}:{settings.Port}/");
-                client.Timeout = TimeSpan.FromSeconds(30);
-            });
+            services.AddHttpClient(clientName, (sp, client) => ConfigureClient(sp, client));
+        }
+
+        private static void ConfigureClient(IServiceProvider sp, HttpClient client)
+        {
+            var settings = sp.GetRequiredService<IOptions<KeyCloakSettings>>().Value;
+            client.BaseAddress = new Uri($"http://{settings.Host}:{settings.Port}/");
+            client.Timeout = TimeSpan.FromSeconds(30);
         }
     }
 }
