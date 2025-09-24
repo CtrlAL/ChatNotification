@@ -10,44 +10,39 @@ namespace ChatService.Services
     public class ChatService : IChatService
     {
         private readonly IHubContext<ChatHub, IChatHub> _hubContext;
-        private readonly ILogger<ChatService> _logger;
         private readonly IChatMessageRepository _chatMessageRepository;
+        private readonly IConnectionService _connectionService;
 
-        public ChatService(IHubContext<ChatHub, 
-            IChatHub> hubContext, 
-            ILogger<ChatService> logger,
-            IChatMessageRepository chatMessageRepository)
+        public ChatService(IHubContext<ChatHub, IChatHub> hubContext, 
+            IChatMessageRepository chatMessageRepository,
+            IConnectionService connectionService)
         {
             _hubContext = hubContext;
-            _logger = logger;
             _chatMessageRepository = chatMessageRepository;
+            _connectionService = connectionService;
         }
 
-        public async Task ProcessMessageAsync(
-            string connectionId,
-            string? userId,
-            string username,
-            ChatMessage chatMessage)
+        public async Task ProcessMessageAsync(string username, ChatMessage chatMessage)
         {
-            var messageToSave = new ChatMessage
-            {
-            };
-            await _chatMessageRepository.CreateAsync(messageToSave);
+            var message = await _chatMessageRepository.CreateAsync(chatMessage);
 
-            await _hubContext.Clients.All.ReceiveMessage(username, chatMessage.Text);
-
-            _logger.LogInformation("Message sent by {UserId} ({Username}): {Text}",
-                userId, username, chatMessage.Text);
+            await _hubContext.Clients.All.ReceiveMessage(username, message);
         }
 
         public async Task UserConnectedAsync(string connectionId, string? userId)
         {
+            await _connectionService.AddConnectionAsync(connectionId, userId);
             await _hubContext.Clients.All.UserJoined(userId ?? connectionId, "Anonymous");
         }
 
         public async Task UserDisconnectedAsync(string connectionId)
         {
-            await _hubContext.Clients.All.UserLeft(connectionId);
+            var odd = await _connectionService.RemoveConnectionAsync(connectionId);
+
+            if (odd == 0)
+            {
+                await _hubContext.Clients.All.UserLeft(connectionId);
+            }
         }
     }
 }

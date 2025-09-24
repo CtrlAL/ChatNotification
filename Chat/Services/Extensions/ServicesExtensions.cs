@@ -7,6 +7,7 @@ namespace ChatService.Services.Extensions
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IChatService, ChatService>();
+            services.AddSingleton<IConnectionService, ConnectionService>();
         }
     }
 }

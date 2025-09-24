@@ -55,5 +55,32 @@ namespace Redis.Implementations
         {
             return await _db.ListRightPushAsync(key, value);
         }
+
+        public async Task<bool> RemoveAsync(string key)
+        {
+            return await _db.KeyDeleteAsync(key);
+        }
+
+        public async Task<long> RemoveAsync(params string[] keys)
+        {
+            var redisKeys = keys.Select(k => (RedisKey)k).ToArray();
+            return await _db.KeyDeleteAsync(redisKeys);
+        }
+
+        public async Task<bool> HashDeleteFieldAsync(string key, string field)
+        {
+            return await _db.HashDeleteAsync(key, field);
+        }
+
+        public async Task<long> HashDeleteFieldsAsync(string key, params string[] fields)
+        {
+            var redisFields = fields.Select(f => (RedisValue)f).ToArray();
+            return await _db.HashDeleteAsync(key, redisFields);
+        }
+
+        public async Task<long> ListRemoveAsync(string key, string value, long count = 0)
+        {
+            return await _db.ListRemoveAsync(key, value, count);
+        }
     }
 }

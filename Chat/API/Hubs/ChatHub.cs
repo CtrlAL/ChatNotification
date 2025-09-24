@@ -18,26 +18,33 @@ namespace ChatService.API.Hubs
 
         public async Task SendMessage(ChatMessage message)
         {
+            var username = Context.User?.FindFirst("preferred_username")?.Value
+                        ?? Context.User?.FindFirst("name")?.Value;
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
 
-            var username = Context.User?.FindFirst("preferred_username")?.Value
-                        ?? Context.User?.FindFirst("name")?.Value
-                        ?? "Anonymous";
-
-            await _chatService.ProcessMessageAsync(Context.ConnectionId, Context.UserIdentifier, username, message);
+            await _chatService.ProcessMessageAsync(username, message);
         }
 
         public override async Task OnConnectedAsync()
         {
             var userId = Context.UserIdentifier;
+
             await _chatService.UserConnectedAsync(Context.ConnectionId, Context.UserIdentifier);
+
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             await _chatService.UserDisconnectedAsync(Context.ConnectionId);
+
             await base.OnDisconnectedAsync(exception);
         }
     }
