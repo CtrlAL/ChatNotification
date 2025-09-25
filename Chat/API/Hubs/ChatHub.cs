@@ -1,12 +1,12 @@
 ﻿using ChatService.API.Hubs.Interfaces;
 using ChatService.API.Infrastructure.Models.Create;
 using ChatService.DataAccess.Repositories.Interfaces;
-using ChatService.Policy;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using ChatService.ClaimsExtensions;
+using ChatService.Policy.Autorizators.Interfaces;
 
 namespace ChatService.API.Hubs
 {
@@ -14,19 +14,20 @@ namespace ChatService.API.Hubs
     public class ChatHub : Hub<IChatHub>
     {
         private readonly IChatService _chatService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IChatAutorizator _chatAutorizator;
         private readonly IChatRepository _chatRepository;
 
-        private ClaimsPrincipal? User => Context.User;
-
         public ChatHub(IChatService chatService, 
-            IAuthorizationService authorizationService, 
+            IChatAutorizator chatAutorizator, 
             IChatRepository chatRepository)
         {
             _chatService = chatService;
-            _authorizationService = authorizationService;
+            _chatAutorizator = chatAutorizator;
             _chatRepository = chatRepository;
         }
+
+        private ClaimsPrincipal? User => Context.User;
+
 
         public async Task SendMessage(ChatMessageModel message)
         {
@@ -40,7 +41,7 @@ namespace ChatService.API.Hubs
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
 
-            var authResult = await AuthChatResourse(message.ChatId, User);
+            var authResult = await _chatAutorizator.AuthorizeAsync(message.ChatId, User);
 
             if (!authResult.Succeeded)
             {
@@ -78,13 +79,6 @@ namespace ChatService.API.Hubs
             await _chatService.UserDisconnectedAsync(Context.ConnectionId, userId, username);
 
             await base.OnDisconnectedAsync(exception);
-        }
-
-        private async Task<AuthorizationResult> AuthChatResourse(string chatId, ClaimsPrincipal user)
-        {
-            var chat = await _chatRepository.GetAsync(chatId);
-
-            return await _authorizationService.AuthorizeAsync(user, chat, PolicyNames.ResourceOwner);
         }
     }
 }
