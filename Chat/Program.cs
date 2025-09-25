@@ -6,6 +6,7 @@ using KeycloakAuth;
 using Microsoft.OpenApi.Models;
 using Redis.Implementations;
 using ChatService.Services.Extensions;
+using ChatService.API.Hubs;
 
 namespace ChatService
 {
@@ -62,6 +63,8 @@ namespace ChatService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.MapHub<ChatHub>("api/chat-hub");
 
             app.UseHttpsRedirection();
 
