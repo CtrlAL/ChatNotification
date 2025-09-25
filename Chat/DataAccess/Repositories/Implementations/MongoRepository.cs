@@ -22,9 +22,10 @@ namespace ChatService.DataAccess.Repositories.Implementations
 
         public async Task<List<TModel>> GetAsync(TFilter filter)
         {
-            var list = await _collection.FindAsync(x => true);
+            var dbFilter = BuildFilter(filter);
+            var cursor = _collection.Find(dbFilter);
 
-            return FilterAsync(list, filter).ToList();
+            return await cursor.ToListAsync();
         }
 
         public async Task<TModel> GetAsync(string id)
@@ -44,9 +45,6 @@ namespace ChatService.DataAccess.Repositories.Implementations
             await _collection.ReplaceOneAsync(x => x.Id == id, message);
         }
 
-        protected virtual IAsyncCursor<TModel> FilterAsync(IAsyncCursor<TModel> cursor, TFilter filter)
-        {
-            return cursor;
-        }
+        protected abstract FilterDefinition<TModel> BuildFilter(TFilter filter);
     }
 }

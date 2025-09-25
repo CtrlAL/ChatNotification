@@ -1,18 +1,27 @@
 ﻿using ChatService.DataAccess.Repositories.Interfaces;
 using ChatService.Domain;
+using ChatService.Domain.Filters;
 using MongoDB.Driver;
 
 namespace ChatService.DataAccess.Repositories.Implementations
 {
-    public class ChatMessageRepository : MongoRepository<ChatMessage, object>, IChatMessageRepository
+    public class ChatMessageRepository : MongoRepository<ChatMessage, UserResourseFilter>, IChatMessageRepository
     {
         public ChatMessageRepository(IMongoCollection<ChatMessage> collection) : base(collection)
         {
         }
 
-        protected override IAsyncCursor<ChatMessage> FilterAsync(IAsyncCursor<ChatMessage> cursor, object filter)
+        protected override FilterDefinition<ChatMessage> BuildFilter(UserResourseFilter filter)
         {
-            return base.FilterAsync(cursor, filter);
+            var builder = Builders<ChatMessage>.Filter;
+            var filters = new List<FilterDefinition<ChatMessage>>();
+
+            if (!string.IsNullOrEmpty(filter.UserId))
+                filters.Add(builder.Eq(x => x.UserId, filter.UserId));
+
+            return filters.Count == 0
+                ? builder.Empty
+                : builder.And(filters);
         }
     }
 }

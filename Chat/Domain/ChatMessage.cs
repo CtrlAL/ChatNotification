@@ -15,5 +15,6 @@ namespace ChatService.Domain
 
         [BsonRequired]
         public string Text { get; set; } = null!;
+        public string UserId { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using ChatService.DataAccess.Repositories.Interfaces;
 using ChatService.API.Infrastructure.Models.Create;
 using ChatService.API.Infrastructure.Models.Get;
 using ChatService.API.Infrastructure.Models.Get.Response;
+using ChatService.Domain;
 
 namespace ChatService.API.Controllers
 {
@@ -30,6 +31,13 @@ namespace ChatService.API.Controllers
         [HttpPost("create-chat")]
         public async Task<ActionResult<CreateResponse>> CreateChat()
         {
+            var userId = (User.Claims.First(x => x.Value == "sub")).Value;
+
+            var chat = new Chat
+            {
+                UserId = userId
+            };
+
             var result = await _chatRepository.CreateAsync(new());
 
             return Ok(new CreateResponse(result));
