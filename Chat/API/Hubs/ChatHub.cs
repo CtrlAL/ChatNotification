@@ -3,6 +3,7 @@ using ChatService.API.Infrastructure.Models.Create;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace ChatService.API.Hubs
 {
@@ -21,6 +22,8 @@ namespace ChatService.API.Hubs
             var username = Context.User?.FindFirst("preferred_username")?.Value
                         ?? Context.User?.FindFirst("name")?.Value;
 
+            var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (string.IsNullOrWhiteSpace(username))
             {
                 return;
@@ -29,7 +32,7 @@ namespace ChatService.API.Hubs
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
 
-            var entity = ChatMessageModel.FromModel(message);
+            var entity = ChatMessageModel.FromModel(message, userId);
 
             await _chatService.ProcessMessageAsync(username, entity);
         }

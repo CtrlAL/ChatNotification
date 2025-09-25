@@ -7,6 +7,7 @@ using ChatService.API.Infrastructure.Models.Create;
 using ChatService.API.Infrastructure.Models.Get;
 using ChatService.API.Infrastructure.Models.Get.Response;
 using ChatService.Domain;
+using System.Security.Claims;
 
 namespace ChatService.API.Controllers
 {
@@ -31,37 +32,19 @@ namespace ChatService.API.Controllers
         [HttpPost("create-chat")]
         public async Task<ActionResult<CreateResponse>> CreateChat()
         {
-            var userId = (User.Claims.First(x => x.Value == "sub")).Value;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return Forbid();
+            }
 
             var chat = new Chat
             {
                 UserId = userId
             };
 
-            var result = await _chatRepository.CreateAsync(new());
-
-            return Ok(new CreateResponse(result));
-        }
-
-        [HttpPost("send-message")]
-        public async Task<ActionResult<CreateResponse>> SendMessage([FromBody] ChatMessageModel message)
-        {
-            if (string.IsNullOrWhiteSpace(message.Text))
-                return BadRequest("Сообщение не может быть пустым.");
-
-            var entity = ChatMessageModel.FromModel(message);
-
-            var result = await _messageRepository.CreateAsync(entity);
-
-            await _messageProducer.ProduceAsync(
-                new MessageSendedDto { 
-                    ChatId = result.ChatId,
-                    MessageId = result.Id,
-                    SendTime = DateTime.UtcNow,
-                }, 
-                default);
-
-            var resultModel =  GetChatMessageModel.ToModel(result);
+            var result = await _chatRepository.CreateAsync(chat);
 
             return Ok(new CreateResponse(result));
         }
