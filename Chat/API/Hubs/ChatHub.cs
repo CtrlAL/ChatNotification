@@ -6,6 +6,8 @@ using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using ChatService.ClaimsExtensions;
+using ChatService.Domain;
 
 namespace ChatService.API.Hubs
 {
@@ -15,6 +17,8 @@ namespace ChatService.API.Hubs
         private readonly IChatService _chatService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IChatRepository _chatRepository;
+
+        private ClaimsPrincipal? User => Context.User;
 
         public ChatHub(IChatService chatService, 
             IAuthorizationService authorizationService, 
@@ -27,9 +31,9 @@ namespace ChatService.API.Hubs
 
         public async Task SendMessage(ChatMessageModel message)
         {
-            GetUserInfo(out var user, out var username, out var userId);
+            User.GetUserInfo(out var username, out var userId);
 
-            if (!CheckTokenContinuity(user, username, userId))
+            if (!User.CheckTokenContinuity(username, userId))
             {
                 return;
             }
@@ -37,7 +41,7 @@ namespace ChatService.API.Hubs
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
 
-            var authResult = await AuthChatResourse(message.ChatId, user);
+            var authResult = await AuthChatResourse(message.ChatId, User);
 
             if (!authResult.Succeeded)
             {
@@ -51,9 +55,9 @@ namespace ChatService.API.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            GetUserInfo(out var user, out var username, out var userId);
+            User.GetUserInfo(out var username, out var userId);
 
-            if (!CheckTokenContinuity(user, username, userId))
+            if (!User.CheckTokenContinuity(username, userId))
             {
                 return;
             }
@@ -65,9 +69,9 @@ namespace ChatService.API.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            GetUserInfo(out var user, out var username, out var userId);
+            User.GetUserInfo(out var username, out var userId);
 
-            if (!CheckTokenContinuity(user, username, userId))
+            if (!User.CheckTokenContinuity(username, userId))
             {
                 return;
             }
@@ -75,36 +79,6 @@ namespace ChatService.API.Hubs
             await _chatService.UserDisconnectedAsync(Context.ConnectionId, userId, username);
 
             await base.OnDisconnectedAsync(exception);
-        }
-
-        private void GetUserInfo(out ClaimsPrincipal? user, out string? username, out string? userId)
-        {
-            user = Context.User;
-
-            username = user?.FindFirst("preferred_username")?.Value
-                        ?? user?.FindFirst("name")?.Value;
-
-            userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-
-        private bool CheckTokenContinuity(ClaimsPrincipal? user, string? username, string? userId)
-        {
-            if (user == null)
-            {
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         private async Task<AuthorizationResult> AuthChatResourse(string chatId, ClaimsPrincipal user)
