@@ -1,4 +1,6 @@
-﻿namespace ChatService.Domain
+﻿using ChatService.Domain.Interfaces;
+
+namespace ChatService.Domain
 {
     public class User : IMongoModel
     {

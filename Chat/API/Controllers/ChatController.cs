@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Kafka.Interfaces;
-using ChatService.Domain.Dto;
 using Microsoft.AspNetCore.Authorization;
 using ChatService.DataAccess.Repositories.Interfaces;
-using ChatService.API.Infrastructure.Models.Create;
 using ChatService.API.Infrastructure.Models.Get;
 using ChatService.API.Infrastructure.Models.Get.Response;
 using ChatService.Domain;
 using System.Security.Claims;
+using System;
 
 namespace ChatService.API.Controllers
 {
@@ -17,15 +15,15 @@ namespace ChatService.API.Controllers
     public class ChatController : ControllerBase
     {
         private readonly IChatRepository _chatRepository;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IChatMessageRepository _messageRepository;
-        private readonly IMessageProducer<MessageSendedDto> _messageProducer;
 
         public ChatController(IChatMessageRepository messageRepository, 
-            IMessageProducer<MessageSendedDto> messageProducer, 
+            IAuthorizationService authorizationService,
             IChatRepository chatRepository)
         {
             _messageRepository = messageRepository;
-            _messageProducer = messageProducer;
+            _authorizationService = authorizationService;
             _chatRepository = chatRepository;
         }
 
@@ -56,6 +54,21 @@ namespace ChatService.API.Controllers
             var searchResult = new SearchResultResponse<GetChatMessageModel>(result ?? new List<GetChatMessageModel>());
 
             return Ok(searchResult);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> GetChat([FromRoute] string id)
+        {
+            var result = await _messageRepository.GetAsync(id);
+
+            var authResult = await _authorizationService.AuthorizeAsync(User, result, "ChatOwner");
+
+            if (!authResult.Succeeded)
+            {
+                return User.Identity?.IsAuthenticated == true ? Forbid() : Challenge();
+            }
+
+            return Ok(GetChatMessageModel.ToModel(result));
         }
 
         [HttpPost("chat-list")]

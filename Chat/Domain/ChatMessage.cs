@@ -1,9 +1,10 @@
-﻿using MongoDB.Bson;
+﻿using ChatService.Domain.Interfaces;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ChatService.Domain
 {
-    public class ChatMessage : IMongoModel
+    public class ChatMessage : IMongoModel, IUserResourse
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

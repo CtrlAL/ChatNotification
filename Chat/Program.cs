@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Redis.Implementations;
 using ChatService.Services.Extensions;
 using ChatService.API.Hubs;
+using ChatService.Policy;
 
 namespace ChatService
 {
@@ -18,6 +19,7 @@ namespace ChatService
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -55,6 +57,7 @@ namespace ChatService
 
             builder.Services.AddProducer<MessageSendedDto>(builder.Configuration.GetSection("KafkaSettings"));
             builder.Services.AddKeyCloak(builder.Configuration.GetSection("KeyCloak"));
+            builder.Services.AddPolicies();
 
             var app = builder.Build();
 

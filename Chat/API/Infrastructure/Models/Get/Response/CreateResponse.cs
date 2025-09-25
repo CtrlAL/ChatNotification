@@ -1,4 +1,4 @@
-﻿using ChatService.Domain;
+﻿using ChatService.Domain.Interfaces;
 
 namespace ChatService.API.Infrastructure.Models.Get.Response
 {

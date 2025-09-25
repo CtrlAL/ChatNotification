@@ -1,5 +1,5 @@
 ﻿using ChatService.DataAccess.Repositories.Interfaces;
-using ChatService.Domain;
+using ChatService.Domain.Interfaces;
 using MongoDB.Driver;
 
 namespace ChatService.DataAccess.Repositories.Implementations

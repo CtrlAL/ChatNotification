@@ -23,8 +23,6 @@ namespace KeycloakAuth
                 options.Audience = keycloak.Audience;
                 options.RequireHttpsMetadata = false;
             });
-
-            services.AddAuthorization();
         }
 
         public static void AddKeyCloakClient(this IServiceCollection services, IConfigurationSection section, string clientName)

@@ -2,6 +2,7 @@
 using ChatService.DataAccess.Repositories.Interfaces;
 using ChatService.Domain;
 using ChatService.Domain.Filters;
+using ChatService.Domain.Interfaces;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
