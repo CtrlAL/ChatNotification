@@ -1,4 +1,5 @@
 ﻿using ChatService.API.Hubs.Interfaces;
+using ChatService.API.Infrastructure.Models.Create;
 using ChatService.Domain;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace ChatService.API.Hubs
             _chatService = chatService;
         }
 
-        public async Task SendMessage(ChatMessage message)
+        public async Task SendMessage(ChatMessageModel message)
         {
             var username = Context.User?.FindFirst("preferred_username")?.Value
                         ?? Context.User?.FindFirst("name")?.Value;
@@ -29,7 +30,9 @@ namespace ChatService.API.Hubs
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
 
-            await _chatService.ProcessMessageAsync(username, message);
+            var entity = ChatMessageModel.FromModel(message);
+
+            await _chatService.ProcessMessageAsync(username, entity);
         }
 
         public override async Task OnConnectedAsync()

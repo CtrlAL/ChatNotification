@@ -21,8 +21,8 @@ namespace Redis.Implementations
             });
 
 
-            services.AddScoped<IRedisCache, RedisCache>();
-            services.AddScoped<IRedisPubSub, RedisPubSub>();
+            services.AddSingleton<IRedisCache, RedisCache>();
+            services.AddSingleton<IRedisPubSub, RedisPubSub>();
         }
     }
 }
