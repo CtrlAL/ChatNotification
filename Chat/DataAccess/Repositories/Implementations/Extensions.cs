@@ -1,6 +1,7 @@
 ﻿using ChatService.Common.Constants;
 using ChatService.DataAccess.Repositories.Interfaces;
 using ChatService.Domain;
+using ChatService.Domain.Filters;
 using MongoDB.Driver;
 
 namespace ChatService.DataAccess.Repositories.Implementations
@@ -9,11 +10,11 @@ namespace ChatService.DataAccess.Repositories.Implementations
     {
         public static void AddRepositrories(this IServiceCollection services)
         {
-            services.AddMongoRepository<Chat, object, IChatRepository, ChatRepostitory>(
+            services.AddMongoRepository<Chat, UserResourseFilter, IChatRepository, ChatRepostitory>(
                 CollcetionNames.Chats
             );
 
-            services.AddMongoRepository<ChatMessage, object, IChatMessageRepository, ChatMessageRepository>(
+            services.AddMongoRepository<ChatMessage, UserResourseFilter, IChatMessageRepository, ChatMessageRepository>(
                 CollcetionNames.Chats
             );
         }
