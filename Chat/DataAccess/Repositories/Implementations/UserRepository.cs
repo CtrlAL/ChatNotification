@@ -16,9 +16,14 @@ namespace ChatService.DataAccess.Repositories.Implementations
             return users.FirstOrDefault();
         }
 
-        protected override IAsyncCursor<User> FilterAsync(IAsyncCursor<User> cursor, object filter)
+        protected override FilterDefinition<User> BuildFilter(object filter)
         {
-            return base.FilterAsync(cursor, filter);
+            var builder = Builders<User>.Filter;
+            var filters = new List<FilterDefinition<User>>();
+
+            return filters.Count == 0
+                ? builder.Empty
+                : builder.And(filters);
         }
     }
 }
