@@ -1,4 +1,5 @@
 ﻿using ChatService.Common.Configs;
+using ChatService.Domain;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
