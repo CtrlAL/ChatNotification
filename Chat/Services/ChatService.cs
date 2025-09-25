@@ -41,19 +41,19 @@ namespace ChatService.Services
             await _hubContext.Clients.All.ReceiveMessage(username, message);
         }
 
-        public async Task UserConnectedAsync(string connectionId, string? userId)
+        public async Task UserConnectedAsync(string connectionId, string userId, string username)
         {
             await _connectionService.AddConnectionAsync(connectionId, userId);
-            await _hubContext.Clients.All.UserJoined(userId ?? connectionId, "Anonymous");
+            await _hubContext.Clients.All.UserJoined(userId, username);
         }
 
-        public async Task UserDisconnectedAsync(string connectionId)
+        public async Task UserDisconnectedAsync(string connectionId, string userId, string username)
         {
             var odd = await _connectionService.RemoveConnectionAsync(connectionId);
 
             if (odd == 0)
             {
-                await _hubContext.Clients.All.UserLeft(connectionId);
+                await _hubContext.Clients.All.UserLeft(userId, username);
             }
         }
     }

@@ -6,6 +6,6 @@ namespace ChatService.API.Hubs.Interfaces
     {
         Task ReceiveMessage(string username, ChatMessage message);
         Task UserJoined(string userId, string username);
-        Task UserLeft(string userId);
+        Task UserLeft(string userId, string username);
     }
 }

@@ -27,20 +27,9 @@ namespace ChatService.API.Hubs
 
         public async Task SendMessage(ChatMessageModel message)
         {
-            var user = Context.User;
+            GetUserInfo(out var user, out var username, out var userId);
 
-            var username = user?.FindFirst("preferred_username")?.Value
-                        ?? user?.FindFirst("name")?.Value;
-
-
-            var userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(username))
+            if (!CheckTokenContinuity(user, username, userId))
             {
                 return;
             }
@@ -60,28 +49,69 @@ namespace ChatService.API.Hubs
             await _chatService.ProcessMessageAsync(username, entity);
         }
 
-        private async Task<AuthorizationResult> AuthChatResourse(string chatId, ClaimsPrincipal? user)
-        {
-
-            var chat = await _chatRepository.GetAsync(chatId);
-
-            return await _authorizationService.AuthorizeAsync(user, chat, PolicyNames.ResourceOwner);
-        }
-
         public override async Task OnConnectedAsync()
         {
-            var userId = Context.UserIdentifier;
+            GetUserInfo(out var user, out var username, out var userId);
 
-            await _chatService.UserConnectedAsync(Context.ConnectionId, Context.UserIdentifier);
+            if (!CheckTokenContinuity(user, username, userId))
+            {
+                return;
+            }
+
+            await _chatService.UserConnectedAsync(Context.ConnectionId, userId, username);
 
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            await _chatService.UserDisconnectedAsync(Context.ConnectionId);
+            GetUserInfo(out var user, out var username, out var userId);
+
+            if (!CheckTokenContinuity(user, username, userId))
+            {
+                return;
+            }
+
+            await _chatService.UserDisconnectedAsync(Context.ConnectionId, userId, username);
 
             await base.OnDisconnectedAsync(exception);
+        }
+
+        private void GetUserInfo(out ClaimsPrincipal? user, out string? username, out string? userId)
+        {
+            user = Context.User;
+
+            username = user?.FindFirst("preferred_username")?.Value
+                        ?? user?.FindFirst("name")?.Value;
+
+            userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        private bool CheckTokenContinuity(ClaimsPrincipal? user, string? username, string? userId)
+        {
+            if (user == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<AuthorizationResult> AuthChatResourse(string chatId, ClaimsPrincipal user)
+        {
+            var chat = await _chatRepository.GetAsync(chatId);
+
+            return await _authorizationService.AuthorizeAsync(user, chat, PolicyNames.ResourceOwner);
         }
     }
 }
