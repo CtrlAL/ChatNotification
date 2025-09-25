@@ -1,6 +1,5 @@
 ﻿using ChatService.API.Hubs.Interfaces;
 using ChatService.API.Infrastructure.Models.Create;
-using ChatService.Domain;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
