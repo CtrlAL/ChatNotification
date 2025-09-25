@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  chat-api:
+    build:
+      context: .
+      dockerfile: ChatService/Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - MongoConnection=mongodb://admin:123@mongodb-auth:27017/admin?authSource=admin
+      - DataAccessName=testDb
+      - Keycloak__Authority=http://keycloak:8080/realms/dev
+      - Redis=redis-server:6379
+      - Kafka__BootstrapServers=kafka-broker:9092
+    depends_on:
+      - mongodb-auth
+      - keycloak
+      - redis-server
+      - kafka-broker
+    networks:
+      - app-network
+
+  mongodb-auth:
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8090:8080"
+    networks:
+      - app-network
+
+  redis-server:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  kafka-broker:
+    image: apache/kafka:latest
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:9092
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
