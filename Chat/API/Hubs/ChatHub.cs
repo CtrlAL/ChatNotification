@@ -1,5 +1,7 @@
 ﻿using ChatService.API.Hubs.Interfaces;
 using ChatService.API.Infrastructure.Models.Create;
+using ChatService.DataAccess.Repositories.Interfaces;
+using ChatService.Policy;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -11,6 +13,8 @@ namespace ChatService.API.Hubs
     public class ChatHub : Hub<IChatHub>
     {
         private readonly IChatService _chatService;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IChatRepository _chatRepository;
 
         public ChatHub(IChatService chatService)
         {
@@ -19,10 +23,17 @@ namespace ChatService.API.Hubs
 
         public async Task SendMessage(ChatMessageModel message)
         {
-            var username = Context.User?.FindFirst("preferred_username")?.Value
-                        ?? Context.User?.FindFirst("name")?.Value;
+            var user = Context.User;
 
-            var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var username = user?.FindFirst("preferred_username")?.Value
+                        ?? user?.FindFirst("name")?.Value;
+
+            var userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -31,6 +42,16 @@ namespace ChatService.API.Hubs
 
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
+
+
+            var chat = await _chatRepository.GetAsync(message.ChatId);
+
+            var authResult = await _authorizationService.AuthorizeAsync(user, chat, PolicyNames.ResourceOwner);
+
+            if (!authResult.Succeeded)
+            {
+                return;
+            }
 
             var entity = ChatMessageModel.FromModel(message, userId);
 
