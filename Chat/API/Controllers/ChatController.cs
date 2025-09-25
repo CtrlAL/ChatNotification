@@ -6,6 +6,7 @@ using ChatService.API.Infrastructure.Models.Get.Response;
 using ChatService.Domain;
 using System.Security.Claims;
 using ChatService.Domain.Filters;
+using ChatService.Policy;
 
 namespace ChatService.API.Controllers
 {
@@ -52,7 +53,7 @@ namespace ChatService.API.Controllers
         {
             var chat = await _messageRepository.GetAsync(chatId);
 
-            var authResult = await _authorizationService.AuthorizeAsync(User, chat, "ChatOwner");
+            var authResult = await _authorizationService.AuthorizeAsync(User, chat, PolicyNames.ResourceOwner);
 
             if (!authResult.Succeeded)
             {
@@ -92,7 +93,7 @@ namespace ChatService.API.Controllers
         {
             var result = await _messageRepository.GetAsync(id);
 
-            var authResult = await _authorizationService.AuthorizeAsync(User, result, "ChatOwner");
+            var authResult = await _authorizationService.AuthorizeAsync(User, result, PolicyNames.ResourceOwner);
 
             if (!authResult.Succeeded)
             {
@@ -107,7 +108,7 @@ namespace ChatService.API.Controllers
         {
             var result = await _messageRepository.GetAsync(id);
 
-            var authResult = await _authorizationService.AuthorizeAsync(User, result, "ChatOwner");
+            var authResult = await _authorizationService.AuthorizeAsync(User, result, PolicyNames.ResourceOwner);
 
             if (!authResult.Succeeded)
             {

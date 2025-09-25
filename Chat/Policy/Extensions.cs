@@ -12,7 +12,7 @@ namespace ChatService.Policy
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ResourceOwner", policy =>
+                options.AddPolicy(PolicyNames.ResourceOwner, policy =>
                     policy.Requirements.Add(new UserResourceOwnerRequirement()));
             });
         }
