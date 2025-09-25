@@ -51,9 +51,7 @@ namespace ChatService.API.Controllers
         [HttpGet("message-list/{chatId}")]
         public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> GetMessageList([FromRoute] string chatId)
         {
-            var chat = await _messageRepository.GetAsync(chatId);
-
-            var authResult = await _authorizationService.AuthorizeAsync(User, chat, PolicyNames.ResourceOwner);
+            var authResult = await AuthChatResourse(chatId);
 
             if (!authResult.Succeeded)
             {
@@ -64,6 +62,14 @@ namespace ChatService.API.Controllers
             var searchResult = new SearchResultResponse<GetChatMessageModel>(result ?? new List<GetChatMessageModel>());
 
             return Ok(searchResult);
+        }
+
+        private async Task<AuthorizationResult> AuthChatResourse(string chatId)
+        {
+            var chat = await _messageRepository.GetAsync(chatId);
+
+            var authResult = await _authorizationService.AuthorizeAsync(User, chat, PolicyNames.ResourceOwner);
+            return authResult;
         }
 
         [HttpPost("chat-list")]
@@ -106,9 +112,7 @@ namespace ChatService.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> Delete([FromRoute] string id)
         {
-            var result = await _messageRepository.GetAsync(id);
-
-            var authResult = await _authorizationService.AuthorizeAsync(User, result, PolicyNames.ResourceOwner);
+            var authResult = await AuthChatResourse(id);
 
             if (!authResult.Succeeded)
             {
