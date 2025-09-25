@@ -1,6 +1,7 @@
 ﻿using ChatService.API.Hubs.Interfaces;
 using ChatService.API.Infrastructure.Models.Create;
 using ChatService.DataAccess.Repositories.Interfaces;
+using ChatService.Domain;
 using ChatService.Policy;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,7 @@ namespace ChatService.API.Hubs
             var username = user?.FindFirst("preferred_username")?.Value
                         ?? user?.FindFirst("name")?.Value;
 
+
             var userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrWhiteSpace(userId))
@@ -43,10 +45,7 @@ namespace ChatService.API.Hubs
             if (string.IsNullOrWhiteSpace(message.Text))
                 return;
 
-
-            var chat = await _chatRepository.GetAsync(message.ChatId);
-
-            var authResult = await _authorizationService.AuthorizeAsync(user, chat, PolicyNames.ResourceOwner);
+            var authResult = await AuthChatResourse(message.ChatId, user);
 
             if (!authResult.Succeeded)
             {
@@ -56,6 +55,14 @@ namespace ChatService.API.Hubs
             var entity = ChatMessageModel.FromModel(message, userId);
 
             await _chatService.ProcessMessageAsync(username, entity);
+        }
+
+        private async Task<AuthorizationResult> AuthChatResourse(string chatId, ClaimsPrincipal? user)
+        {
+
+            var chat = await _chatRepository.GetAsync(chatId);
+
+            return await _authorizationService.AuthorizeAsync(user, chat, PolicyNames.ResourceOwner);
         }
 
         public override async Task OnConnectedAsync()
