@@ -31,6 +31,11 @@ namespace ChatService.API.Hubs
 
         public async Task SendMessage(ChatMessageModel message)
         {
+            if (!message.IsValid(out _))
+            {
+                return;
+            }
+
             User.GetUserInfo(out var username, out var userId);
 
             if (!User.CheckTokenContinuity(username, userId))

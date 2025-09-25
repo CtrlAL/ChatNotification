@@ -1,4 +1,6 @@
-﻿namespace ChatService.Domain.Interfaces
+﻿using MongoDB.Bson;
+
+namespace ChatService.Domain.Interfaces
 {
     public interface IMongoModel
     {
