@@ -24,6 +24,11 @@ namespace ChatService.Policy.Autorizators.Implementations
         {
             var resourse = await _repository.GetAsync(resourseId);
 
+            if (resourse == null)
+            {
+                return AuthorizationResult.Failed();
+            }
+
             var authResult = await _authorizationService.AuthorizeAsync(user, resourse, PolicyNames.ResourceOwner);
 
             return authResult;
