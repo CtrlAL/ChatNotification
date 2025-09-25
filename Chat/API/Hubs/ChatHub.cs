@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using ChatService.ClaimsExtensions;
-using ChatService.Domain;
 
 namespace ChatService.API.Hubs
 {
