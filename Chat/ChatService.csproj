@@ -22,8 +22,4 @@
     <ProjectReference Include="..\Redis\Redis.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Policy\Reqierments\" />
-  </ItemGroup>
-
 </Project>

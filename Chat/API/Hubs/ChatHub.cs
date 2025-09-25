@@ -1,7 +1,6 @@
 ﻿using ChatService.API.Hubs.Interfaces;
 using ChatService.API.Infrastructure.Models.Create;
 using ChatService.DataAccess.Repositories.Interfaces;
-using ChatService.Domain;
 using ChatService.Policy;
 using ChatService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -17,9 +16,13 @@ namespace ChatService.API.Hubs
         private readonly IAuthorizationService _authorizationService;
         private readonly IChatRepository _chatRepository;
 
-        public ChatHub(IChatService chatService)
+        public ChatHub(IChatService chatService, 
+            IAuthorizationService authorizationService, 
+            IChatRepository chatRepository)
         {
             _chatService = chatService;
+            _authorizationService = authorizationService;
+            _chatRepository = chatRepository;
         }
 
         public async Task SendMessage(ChatMessageModel message)
