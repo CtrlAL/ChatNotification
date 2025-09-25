@@ -76,7 +76,7 @@ namespace ChatService.API.Controllers
                 return NotFound();
             }
 
-            var authResult = await _chatAutorizator.AuthorizeAsync(id, User);
+            var authResult = await _chatAutorizator.AuthorizeAsync(result, User);
 
             if (!authResult.Succeeded)
             {
@@ -97,7 +97,7 @@ namespace ChatService.API.Controllers
                 return NotFound();
             }
 
-            var authResult = await _chatAutorizator.AuthorizeAsync(id, User);
+            var authResult = await _chatAutorizator.AuthorizeAsync(result, User);
 
             if (!authResult.Succeeded)
             {

@@ -51,7 +51,7 @@ namespace ChatService.API.Controllers
                 return NotFound();
             }
 
-            var authResult = await _chatMessageAuthorizator.AuthorizeAsync(id, User);
+            var authResult = await _chatMessageAuthorizator.AuthorizeAsync(result, User);
 
             if (!authResult.Succeeded)
             {
