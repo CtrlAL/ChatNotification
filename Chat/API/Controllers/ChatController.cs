@@ -6,7 +6,7 @@ using ChatService.API.Infrastructure.Models.Get.Response;
 using ChatService.Domain;
 using System.Security.Claims;
 using ChatService.Domain.Filters;
-using ChatService.Policy;
+using ChatService.Policy.Autorizators.Interfaces;
 
 namespace ChatService.API.Controllers
 {
@@ -16,16 +16,12 @@ namespace ChatService.API.Controllers
     public class ChatController : ControllerBase
     {
         private readonly IChatRepository _chatRepository;
-        private readonly IAuthorizationService _authorizationService;
-        private readonly IChatMessageRepository _messageRepository;
+        private readonly IChatAutorizator _chatAutorizator;
 
-        public ChatController(IChatMessageRepository messageRepository, 
-            IAuthorizationService authorizationService,
-            IChatRepository chatRepository)
+        public ChatController(IChatRepository chatRepository, IChatAutorizator chatAutorizator)
         {
-            _messageRepository = messageRepository;
-            _authorizationService = authorizationService;
             _chatRepository = chatRepository;
+            _chatAutorizator = chatAutorizator;
         }
 
         [HttpPost("create-chat")]
@@ -46,30 +42,6 @@ namespace ChatService.API.Controllers
             var result = await _chatRepository.CreateAsync(chat);
 
             return Ok(new CreateResponse(result));
-        }
-
-        [HttpGet("message-list/{chatId}")]
-        public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> GetMessageList([FromRoute] string chatId)
-        {
-            var authResult = await AuthChatResourse(chatId);
-
-            if (!authResult.Succeeded)
-            {
-                return User.Identity?.IsAuthenticated == true ? Forbid() : Challenge();
-            }
-
-            var result = (await _messageRepository.GetAsync(filter: new())).Select(GetChatMessageModel.ToModel).ToList();
-            var searchResult = new SearchResultResponse<GetChatMessageModel>(result ?? new List<GetChatMessageModel>());
-
-            return Ok(searchResult);
-        }
-
-        private async Task<AuthorizationResult> AuthChatResourse(string chatId)
-        {
-            var chat = await _messageRepository.GetAsync(chatId);
-
-            var authResult = await _authorizationService.AuthorizeAsync(User, chat, PolicyNames.ResourceOwner);
-            return authResult;
         }
 
         [HttpPost("chat-list")]
@@ -95,31 +67,44 @@ namespace ChatService.API.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> GetChat([FromRoute] string id)
+        public async Task<ActionResult<SearchResultResponse<GetChatModel>>> GetChat([FromRoute] string id)
         {
-            var result = await _messageRepository.GetAsync(id);
+            var result = await _chatRepository.GetAsync(id);
 
-            var authResult = await _authorizationService.AuthorizeAsync(User, result, PolicyNames.ResourceOwner);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _chatAutorizator.AuthorizeAsync(id, User);
 
             if (!authResult.Succeeded)
             {
                 return User.Identity?.IsAuthenticated == true ? Forbid() : Challenge();
             }
 
-            return Ok(GetChatMessageModel.ToModel(result));
+            return Ok(GetChatModel.ToModel(result));
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<SearchResultResponse<GetChatMessageModel>>> Delete([FromRoute] string id)
         {
-            var authResult = await AuthChatResourse(id);
+            var result = await _chatRepository.GetAsync(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _chatAutorizator.AuthorizeAsync(id, User);
 
             if (!authResult.Succeeded)
             {
                 return User.Identity?.IsAuthenticated == true ? Forbid() : Challenge();
             }
 
-            await _messageRepository.RemoveAsync(id);
+            await _chatRepository.RemoveAsync(id);
 
             return Ok();
         }

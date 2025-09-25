@@ -6,7 +6,7 @@ namespace ChatService.DataAccess.Repositories.Interfaces
         where TModel : class, IMongoModel
     {
         Task<List<TModel>> GetAsync(TFilter filter);
-        Task<TModel> GetAsync(string id);
+        Task<TModel?> GetAsync(string id);
         Task<TModel> CreateAsync(TModel message);
         Task UpdateAsync(string id, TModel message);
         Task RemoveAsync(string id);
